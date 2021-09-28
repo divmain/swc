@@ -966,6 +966,12 @@ impl<'a> Emitter<'a> {
     fn emit_private_method(&mut self, n: &PrivateMethod) -> Result {
         self.emit_leading_comments_of_span(n.span(), false)?;
 
+        self.emit_list(
+            n.function.span,
+            Some(&n.function.decorators),
+            ListFormat::Decorators,
+        )?;
+
         if n.is_static {
             keyword!("static");
             space!();
@@ -1015,6 +1021,12 @@ impl<'a> Emitter<'a> {
         self.emit_leading_comments_of_span(n.span(), false)?;
 
         self.emit_accesibility(n.accessibility)?;
+
+        self.emit_list(
+            n.function.span,
+            Some(&n.function.decorators),
+            ListFormat::Decorators,
+        )?;
 
         if n.is_static {
             keyword!("static");
@@ -1150,6 +1162,8 @@ impl<'a> Emitter<'a> {
         if n.accessibility != Some(Accessibility::Public) {
             self.emit_accesibility(n.accessibility)?;
         }
+
+        self.emit_list(n.span, Some(&n.decorators), ListFormat::Decorators)?;
 
         if n.is_static {
             keyword!("static");
