@@ -196,6 +196,7 @@ impl Options {
             target,
             loose,
             keep_class_names,
+            keep_decorators,
             base_url,
             paths,
             minify: js_minify,
@@ -258,7 +259,7 @@ impl Options {
                     legacy: transform.legacy_decorator,
                     emit_metadata: transform.decorator_metadata,
                 }),
-                syntax.decorators()
+                syntax.decorators() && !keep_decorators
             ),
             Optional::new(typescript::strip(), syntax.typescript()),
             resolver_with_mark(top_level_mark),
@@ -776,6 +777,9 @@ pub struct JscConfig {
     pub keep_class_names: bool,
 
     #[serde(default)]
+    pub keep_decorators: bool,
+
+    #[serde(default)]
     pub base_url: PathBuf,
 
     #[serde(default)]
@@ -1136,6 +1140,7 @@ impl Merge for JscConfig {
         self.target.merge(&from.target);
         self.external_helpers.merge(&from.external_helpers);
         self.keep_class_names.merge(&from.keep_class_names);
+        self.keep_decorators.merge(&from.keep_decorators);
         self.paths.merge(&from.paths);
         self.minify.merge(&from.minify);
         self.experimental.merge(&from.experimental);
