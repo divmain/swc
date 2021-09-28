@@ -1,4 +1,4 @@
-#![deny(unused)]
+#![allow(unused)]
 
 pub use self::{amd::amd, common_js::common_js, umd::umd};
 
